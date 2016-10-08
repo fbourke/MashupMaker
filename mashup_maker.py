@@ -41,7 +41,6 @@ class Mashup_Maker():
 			song_title  = self.song_paths[i]
 			self.mashup_title += ("_" + song_title.split(".")[0]) #this way the file doesnt have an extra underscore at the end
 			self.songs.append(self.open_song(song_title))
-
 		self.get_min_len()
 
 
@@ -66,16 +65,9 @@ class Mashup_Maker():
 		if self.tape_length != 0:
 			self.mash_tape()
 		else:
-			self.pos = 0
-			self.mashup = self.get_song_seg(0,0)
-			self.seg_count = 1
-			while self.pos < self.min_len:
-				print self.seg_count
-				curr_song_index = self.seg_count % len(self.songs)
-				seg = self.get_song_seg(curr_song_index,self.pos)
-				self.seg_count +=1
-				self.mashup = self.mashup.append(seg, crossfade=100) 
-			self.mashup.export(self.mashup_title + ".mp3", format="mp3")
+			self.tape_length = self.min_len
+			print "using min len"
+			self.mash_tape()
 
 	def mash_tape(self):
 		# Mashes random segments from each song into a mixtape of tape_length
@@ -112,6 +104,6 @@ if __name__ == '__main__':
 		mashup_maker = Mashup_Maker(sys.argv[1:])
 		mashup_maker.mash()
 	else:
-		print 'mashup_maker.py -s <song1> -s <song2> -s <song3> -l <mixtape length>'
+		print 'mashup_maker.py [-r] -s <song1> -s <song2> [-s <song3>] [-l <mixtape length>]'
 
 
